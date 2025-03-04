@@ -38,6 +38,14 @@
             </div>
         </div>
 
+        <!-- Grafik Pemasukan Bulanan -->
+        <div class="card mb-4">
+            <div class="card-header">Grafik Pemasukan Bulanan</div>
+            <div class="card-body">
+                <canvas id="pemasukanChart"></canvas>
+            </div>
+        </div>
+
         <!-- Tabel Riwayat Transaksi -->
         <div class="card">
             <div class="card-header">Riwayat Transaksi</div>
@@ -71,4 +79,40 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Data untuk grafik
+        var pemasukanData = @json($grafikPemasukan); // Pastikan ini adalah array data yang diterima dari controller
+        
+        // Ambil bulan dan total pemasukan
+        var bulan = pemasukanData.map(function(item) {
+            return item.bulan;
+        });
+        var totalPemasukan = pemasukanData.map(function(item) {
+            return item.total_harga;
+        });
+
+        // Buat chart
+        var ctx = document.getElementById('pemasukanChart').getContext('2d');
+        var pemasukanChart = new Chart(ctx, {
+            type: 'line', // Jenis grafik: line chart
+            data: {
+                labels: bulan,
+                datasets: [{
+                    label: 'Pemasukan Bulanan',
+                    data: totalPemasukan,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 @endsection
